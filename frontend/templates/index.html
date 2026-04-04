@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazing Bargain Central</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#home" class="brand">
+        <div class="brand-mark">A</div>
+        <div>Amazing <span class="brand-accent">Bargain</span></div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#categories" class="active">Categories</a>
+        <a href="#products">Products</a>
+        <a href="#accounts">Accounts</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#analytics">Analytics</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input id="searchInput" type="text" placeholder="Search products..." />
+        </div>
+        <button class="btn btn-secondary" id="openReviewBtn">Leave Review</button>
+        <button class="btn btn-primary" id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span>●</span> New arrivals every week</div>
+          <h1>Everyday deals that still <span>look good</span></h1>
+          <p>
+            A student-level e-commerce prototype with product browsing, searching, product details,
+            cart behaviour, review submission, and role-based feature placeholders for customer, seller, and admin flows.
+          </p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#products">Shop now</a>
+            <a class="btn btn-secondary" href="#accounts">See account roles</a>
+          </div>
+          <div class="hero-tags">
+            <span>Electronics</span>
+            <span>Clothing</span>
+            <span>Household</span>
+          </div>
+        </div>
+
+        <div class="hero-image-card">
+          <img id="heroImage" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80" alt="featured product" />
+        </div>
+
+        <div class="stats-col">
+          <div class="stat-card active" data-img="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80">
+            <strong>48K+</strong>
+            <div class="muted">Products listed</div>
+          </div>
+          <div class="stat-card" data-img="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80">
+            <strong>2,100+</strong>
+            <div class="muted">Verified sellers</div>
+          </div>
+          <div class="stat-card" data-img="https://images.unsplash.com/photo-1517142089942-ba376ce32a2e?auto=format&fit=crop&w=900&q=80">
+            <strong>£12-£999</strong>
+            <div class="muted">Wide price range</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <small>Explore</small>
+            <h2>Shop by category</h2>
+          </div>
+          <a href="#products">View all products →</a>
+        </div>
+
+        <div class="category-grid" id="categoryGrid"></div>
+      </div>
+    </section>
+
+    <section id="products">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <small>Handpicked</small>
+            <h2>Featured products</h2>
+          </div>
+          <a href="#reviews">See customer feedback →</a>
+        </div>
+
+        <div class="products-toolbar">
+          <div class="filters">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="Electronics">Electronics</button>
+            <button data-filter="Clothing">Clothing</button>
+            <button data-filter="Household">Household</button>
+          </div>
+
+          <select id="sortSelect">
+            <option value="default">Sort: Featured</option>
+            <option value="low-high">Price: Low to High</option>
+            <option value="high-low">Price: High to Low</option>
+            <option value="rating">Rating</option>
+          </select>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <small>Core functions</small>
+            <h2>What this prototype includes</h2>
+          </div>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-box"><h3>Search</h3><p>Users can search products by name or category.</p></div>
+          <div class="feature-box"><h3>Product Details</h3><p>Each product opens into a detail modal with price and description.</p></div>
+          <div class="feature-box"><h3>Purchase Flow</h3><p>Users can add products to cart and see a running total.</p></div>
+          <div class="feature-box"><h3>Reviews</h3><p>Registered-user style review form with basic text formatting buttons and image upload field.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="accounts">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <small>Access levels</small>
+            <h2>User, seller and admin areas</h2>
+          </div>
+        </div>
+
+        <div class="account-grid">
+          <div class="account-box">
+            <h3>Customer account</h3>
+            <p class="muted">Normal users can create an account, log in, buy items and submit reviews after purchase.</p>
+            <ul>
+              <li>Create account</li>
+              <li>Log in and log out</li>
+              <li>Purchase products</li>
+              <li>Leave reviews</li>
+            </ul>
+          </div>
+          <div class="account-box">
+            <h3>Seller account</h3>
+            <p class="muted">Regular users can upgrade to a seller role and manage their own listings.</p>
+            <ul>
+              <li>Upgrade account role</li>
+              <li>List new products</li>
+              <li>Edit existing products</li>
+              <li>View transaction history</li>
+            </ul>
+          </div>
+          <div class="account-box">
+            <h3>Admin account</h3>
+            <p class="muted">Admin capabilities are represented as secured management features in the prototype design.</p>
+            <ul>
+              <li>Manage all users</li>
+              <li>Create and manage listings</li>
+              <li>Monitor logs and activity</li>
+              <li>Review platform behaviour</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <small>Feedback</small>
+            <h2>Customer reviews</h2>
+          </div>
+          <button class="btn btn-secondary" id="openReviewBtn2">Write a review</button>
+        </div>
+
+        <div class="reviews-grid" id="reviewsGrid"></div>
+      </div>
+    </section>
+
+    <section id="analytics">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <small>Logging and analytics</small>
+            <h2>Activity tracking justification</h2>
+          </div>
+        </div>
+
+        <div class="analytics-box">
+          <p class="muted">
+            This prototype includes simulated logging ideas for page views, product clicks, cart actions and purchases.
+            These are the most useful events for security monitoring, seller reporting and platform improvement without collecting excessive personal data.
+          </p>
+          <div class="analytics-list">
+            <div><strong>Page views</strong><p class="muted">Shows general user activity and helps detect unusual browsing spikes.</p></div>
+            <div><strong>Product interactions</strong><p class="muted">Tracks popular items and suspicious repeated access behaviour.</p></div>
+            <div><strong>Purchases</strong><p class="muted">Supports transaction records, fraud checks and seller history.</p></div>
+            <div><strong>Role actions</strong><p class="muted">Useful for admin auditing, seller listing changes and accountability.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand">
+          <div class="brand-mark">A</div>
+          <div>Amazing <span class="brand-accent">Bargain</span></div>
+        </div>
+        <p class="footer-copy">Simple e-commerce prototype for coursework submission. Built using only HTML, CSS and JavaScript.</p>
+      </div>
+      <div>
+        <strong>Categories</strong>
+        <ul>
+          <li><a href="#products">Electronics</a></li>
+          <li><a href="#products">Clothing</a></li>
+          <li><a href="#products">Household</a></li>
+        </ul>
+      </div>
+      <div>
+        <strong>Accounts</strong>
+        <ul>
+          <li><a href="#accounts">Users</a></li>
+          <li><a href="#accounts">Sellers</a></li>
+          <li><a href="#accounts">Admins</a></li>
+        </ul>
+      </div>
+      <div>
+        <strong>Pages</strong>
+        <ul>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#analytics">Analytics</a></li>
+          <li><a href="#home">Top</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="productOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Product details</h3>
+        <button class="close-btn" id="closeProductModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="product-modal-grid">
+          <div class="modal-image"><img id="modalImg" src="" alt="product image"></div>
+          <div>
+            <div class="meta" id="modalCategory"></div>
+            <h2 id="modalTitle"></h2>
+            <div class="rating" id="modalRating"></div>
+            <div class="price-row modal-price-row">
+              <div class="price" id="modalPrice"></div>
+              <div class="old-price" id="modalOldPrice"></div>
+            </div>
+            <p class="muted" id="modalDescription"></p>
+            <div class="qty-row">
+              <span>Quantity:</span>
+              <button id="qtyMinus">-</button>
+              <strong id="qtyValue">1</strong>
+              <button id="qtyPlus">+</button>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-primary" id="addToCartFromModal">Add to cart</button>
+              <button class="btn btn-secondary" id="openReviewFromModal">Review this product</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="reviewOverlay">
+    <div class="modal review-modal">
+      <div class="modal-header">
+        <h3>Leave a review</h3>
+        <button class="close-btn" id="closeReviewModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <form class="review-form" id="reviewForm">
+          <input type="text" id="reviewName" placeholder="Your name" required />
+          <select id="reviewProduct" required></select>
+          <select id="reviewRating" required>
+            <option value="">Select rating</option>
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+          </select>
+          <div class="format-buttons">
+            <button type="button" class="btn btn-secondary format-btn" data-wrap="b">Bold</button>
+            <button type="button" class="btn btn-secondary format-btn" data-wrap="i">Italic</button>
+            <button type="button" class="btn btn-secondary" id="bulletBtn">Bullet list</button>
+          </div>
+          <textarea id="reviewText" rows="6" placeholder="Write your review here. You can use simple formatting like <b>bold</b>, <i>italic</i> or bullet-style lines." required></textarea>
+          <div class="review-tip">Basic formatting support is simulated with simple HTML-style tags, matching the brief requirement.</div>
+          <input type="file" id="reviewImage" accept="image/*" />
+          <button class="btn btn-primary" type="submit">Submit review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <aside class="cart-panel" id="cartPanel">
+    <div class="cart-header">
+      <h3>Your cart</h3>
+      <button class="close-btn" id="closeCart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <strong>Total</strong>
+        <strong id="cartTotal">£0.00</strong>
+      </div>
+      <button class="btn btn-primary full-width" id="purchaseBtn">Simulate purchase</button>
+    </div>
+  </aside>
+
+  <script src="{{ url_for('static', filename='data.js') }}"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
