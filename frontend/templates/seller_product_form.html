@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{% if product %}Edit Product{% else %}Add Product{% endif %} — Amazing Bargain Central{% endblock %}
+
+{% block content %}
+<section class="page-section narrow">
+    <h1>{% if product %}Edit Product{% else %}Add Product{% endif %}</h1>
+
+    <form method="post" class="form-card">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+        <label for="name">Product name</label>
+        <input type="text" name="name" id="name" required maxlength="100"
+               value="{{ product.name if product else '' }}">
+
+        <label for="description">Description</label>
+        <textarea name="description" id="description" rows="4" required
+                  maxlength="2000">{{ product.description if product else '' }}</textarea>
+
+        <label for="price">Price (&pound;)</label>
+        <input type="number" name="price" id="price" step="0.01" min="0.01" max="99999" required
+               value="{{ product.price if product else '' }}">
+
+        <label for="category">Category</label>
+        <input type="text" name="category" id="category" maxlength="50"
+               value="{{ product.category if product else 'General' }}">
+
+        <button type="submit" class="btn btn-primary">
+            {% if product %}Save Changes{% else %}Add Product{% endif %}
+        </button>
+    </form>
+
+    <a href="{{ url_for('seller_dashboard') }}" class="back-link">&larr; Back to dashboard</a>
+</section>
+{% endblock %}

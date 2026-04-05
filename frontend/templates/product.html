@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — Amazing Bargain Central{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <a href="{{ url_for('index') }}" class="back-link">&larr; Back to products</a>
+
+    <!-- product info -->
+    <div class="product-detail">
+        <div class="product-cat">{{ product.category }}</div>
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+        <div class="price big">&pound;{{ "%.2f"|format(product.price) }}</div>
+
+        {% if session.get('user_id') %}
+        <!-- buy form - only shown to logged-in users -->
+        <form method="post" action="{{ url_for('buy_product', product_id=product.id) }}" class="buy-form">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <label for="quantity">Qty</label>
+            <input type="number" name="quantity" id="quantity" value="1" min="1" max="99">
+            <button type="submit" class="btn btn-primary">Buy now</button>
+        </form>
+        {% else %}
+        <p class="muted"><a href="{{ url_for('login') }}">Log in</a> to purchase this product.</p>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- reviews section -->
+    <h2>Reviews</h2>
+
+    {% if has_purchased and session.get('user_id') %}
+    <!-- review form only available if user has bought the product -->
+    <form method="post" action="{{ url_for('add_review', product_id=product.id) }}"
+          enctype="multipart/form-data" class="form-card review-form-card">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <h3>Leave a review</h3>
+
+        <label for="rating">Rating</label>
+        <select name="rating" id="rating" required>
+            <option value="">Select rating</option>
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+        </select>
+
+        <label for="comment">Comment</label>
+        <div class="format-toolbar">
+            <button type="button" class="btn btn-secondary btn-sm format-btn" data-prefix="**" data-suffix="**">Bold</button>
+            <button type="button" class="btn btn-secondary btn-sm format-btn" data-prefix="*" data-suffix="*">Italic</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="bullet-btn">Bullet point</button>
+        </div>
+        <textarea name="comment" id="comment" rows="4" maxlength="2000" required
+                  placeholder="Write your review here. Use **bold**, *italic*, and lines starting with - for bullet points."></textarea>
+        <p class="muted format-help">Formatting is limited on purpose: only bold, italic, and bullet points are supported.</p>
+
+        <label for="image">Image (optional, max 2 MB, png/jpg/webp only)</label>
+        <input type="file" name="image" id="image" accept=".png,.jpg,.jpeg,.webp">
+
+        <button type="submit" class="btn btn-primary">Submit review</button>
+    </form>
+    {% elif session.get('user_id') and not has_purchased %}
+    <p class="muted">You need to purchase this product before you can leave a review.</p>
+    {% else %}
+    <p class="muted"><a href="{{ url_for('login') }}">Log in</a> to leave a review.</p>
+    {% endif %}
+
+    <!-- existing reviews -->
+    {% if reviews %}
+    <div class="reviews-list">
+        {% for r in reviews %}
+        <div class="review-card">
+            <div class="review-header">
+                <span class="rating">{{ '★' * r.rating }}{{ '☆' * (5 - r.rating) }}</span>
+                <strong>{{ r.username }}</strong>
+                <span class="muted">{{ r.created_at }}</span>
+            </div>
+            <div class="review-text">{{ format_review_comment(r.comment) }}</div>
+            {% if r.image_filename %}
+            <img src="{{ url_for('static', filename='uploads/' + r.image_filename) }}"
+                  alt="Review upload" class="review-img">
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">No reviews yet. Be the first!</p>
+    {% endif %}
+</section>
+
+<script>
+    const reviewComment = document.getElementById("comment");
+    const formatButtons = document.querySelectorAll(".format-btn");
+    const bulletButton = document.getElementById("bullet-btn");
+
+    if (reviewComment) {
+        formatButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const start = reviewComment.selectionStart;
+                const end = reviewComment.selectionEnd;
+                const selectedText = reviewComment.value.slice(start, end) || "text";
+                const prefix = button.dataset.prefix;
+                const suffix = button.dataset.suffix;
+                const replacement = `${prefix}${selectedText}${suffix}`;
+
+                reviewComment.setRangeText(replacement, start, end, "end");
+                reviewComment.focus();
+            });
+        });
+
+        if (bulletButton) {
+            bulletButton.addEventListener("click", () => {
+                const start = reviewComment.selectionStart;
+                const insertText = "- New bullet point";
+                reviewComment.setRangeText(insertText, start, start, "end");
+                reviewComment.focus();
+            });
+        }
+    }
+</script>
+{% endblock %}

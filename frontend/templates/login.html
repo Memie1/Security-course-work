@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Login — Amazing Bargain Central{% endblock %}
+
+{% block content %}
+<section class="page-section narrow">
+    <h1>Login</h1>
+    <form method="post" class="form-card">
+        <!-- csrf token to prevent cross-site request forgery -->
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required placeholder="you@example.com">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p class="muted">Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}My Account — Amazing Bargain Central{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <h1>My Account</h1>
+
+    <div class="info-card">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Role:</strong> {{ user.role }}</p>
+        <p><strong>Joined:</strong> {{ user.created_at }}</p>
+    </div>
+
+    <!-- let normal users upgrade to seller -->
+    {% if user.role == 'user' %}
+    <form method="post" action="{{ url_for('become_seller') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary">Upgrade to seller</button>
+    </form>
+    {% endif %}
+
+    <h2>Order History</h2>
+    {% if orders %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in orders %}
+            <tr>
+                <td>{{ o.product_name }}</td>
+                <td>{{ o.quantity }}</td>
+                <td>&pound;{{ "%.2f"|format(o.price) }}</td>
+                <td>{{ o.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No orders yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

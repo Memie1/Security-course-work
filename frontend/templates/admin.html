@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — Amazing Bargain Central{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="section-header">
+        <h1>Admin Dashboard</h1>
+        <a href="{{ url_for('add_product') }}" class="btn btn-primary">+ Add Product</a>
+    </div>
+
+    <!-- user management -->
+    <h2>Users</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.role }}</td>
+                <td>{{ u.created_at }}</td>
+                <td>
+                    {% if u.id != session.get('user_id') %}
+                    <!-- role change form -->
+                    <form method="post" action="{{ url_for('admin_change_role', user_id=u.id) }}" class="inline-form">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                        <select name="role">
+                            <option value="user" {% if u.role == 'user' %}selected{% endif %}>User</option>
+                            <option value="seller" {% if u.role == 'seller' %}selected{% endif %}>Seller</option>
+                            <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>Admin</option>
+                        </select>
+                        <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+                    </form>
+                    <!-- delete form -->
+                    <form method="post" action="{{ url_for('admin_delete_user', user_id=u.id) }}" class="inline-form"
+                          onsubmit="return confirm('Delete this user?')">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    {% else %}
+                    <span class="muted">(you)</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- product management -->
+    <h2>All Products</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Seller</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td><a href="{{ url_for('product_detail', product_id=p.id) }}">{{ p.name }}</a></td>
+                <td>{{ p.category }}</td>
+                <td>&pound;{{ "%.2f"|format(p.price) }}</td>
+                <td>{{ p.seller_name or 'System' }}</td>
+                <td>
+                    <a href="{{ url_for('edit_product', product_id=p.id) }}" class="btn btn-secondary btn-sm">Edit</a>
+                    <form method="post" action="{{ url_for('admin_delete_product', product_id=p.id) }}" class="inline-form"
+                          onsubmit="return confirm('Delete this product?')">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- activity logs for security auditing -->
+    <h2>Activity Logs</h2>
+    <p class="muted">Most recent 200 events. Tracks login attempts, purchases, reviews, and admin actions for audit purposes.</p>
+    <p class="muted">The log keeps user ID, event type, basic detail, IP address, and user agent so the site has an audit trail without storing unnecessary profile data.</p>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>User</th>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>IP Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.created_at }}</td>
+                <td>{{ log.username or 'Anonymous' }}</td>
+                <td>{{ log.event_type }}</td>
+                <td>{{ log.detail or '' }}</td>
+                <td>{{ log.ip_address }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

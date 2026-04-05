@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Seller Dashboard — Amazing Bargain Central{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="section-header">
+        <h1>Seller Dashboard</h1>
+        <a href="{{ url_for('add_product') }}" class="btn btn-primary">+ Add Product</a>
+    </div>
+
+    <!-- seller's own products -->
+    <h2>My Products</h2>
+    {% if products %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td><a href="{{ url_for('product_detail', product_id=p.id) }}">{{ p.name }}</a></td>
+                <td>{{ p.category }}</td>
+                <td>&pound;{{ "%.2f"|format(p.price) }}</td>
+                <td>
+                    <a href="{{ url_for('edit_product', product_id=p.id) }}" class="btn btn-secondary btn-sm">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="muted">You haven't added any products yet.</p>
+    {% endif %}
+
+    <!-- sales / transaction history -->
+    <h2>Transaction History</h2>
+    {% if transactions %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Buyer</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+            <tr>
+                <td>{{ t.product_name }}</td>
+                <td>{{ t.buyer }}</td>
+                <td>{{ t.quantity }}</td>
+                <td>&pound;{{ "%.2f"|format(t.price) }}</td>
+                <td>{{ t.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No transactions yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

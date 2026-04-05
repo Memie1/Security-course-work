@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Amazing Bargain Central{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- top navigation bar -->
+    <header class="topbar">
+        <div class="container nav">
+            <a href="{{ url_for('index') }}" class="brand">
+                <div class="brand-mark">A</div>
+                <div>Amazing <span class="brand-accent">Bargain</span></div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}">Products</a>
+                {% if session.get('role') in ('seller', 'admin') %}
+                <a href="{{ url_for('seller_dashboard') }}">Seller</a>
+                {% endif %}
+                {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+                {% endif %}
+            </nav>
+
+            <div class="nav-actions">
+                {% if session.get('user_id') %}
+                <a href="{{ url_for('account') }}" class="btn btn-secondary">{{ session.username }}</a>
+                <form method="post" action="{{ url_for('logout') }}" class="inline-form nav-form">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- show any flash messages from the server -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for cat, msg in messages %}
+                <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="muted">Amazing Bargain Central &mdash; Secure e-commerce coursework prototype</p>
+        </div>
+    </footer>
+</body>
+</html>
