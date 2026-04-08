@@ -24,6 +24,7 @@ STATIC_DIR = os.path.join(WORKSPACE_DIR, "frontend", "static")
 
 
 def register_endpoint_aliases(app):
+    # These aliases keep the old url_for endpoint names working after the blueprint refactor.
     """keep old endpoint names working even though routes now live in blueprints"""
     endpoint_aliases = {
         "auth.register": "register",
@@ -60,6 +61,7 @@ def register_endpoint_aliases(app):
 
 
 def create_app():
+    # The app factory builds the Flask app and wires the whole project together.
     app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
     app.config["SECRET_KEY"] = get_secret_key(BASE_DIR)

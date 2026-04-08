@@ -2,6 +2,7 @@
 {% block title %}Products — Amazing Bargain Central{% endblock %}
 
 {% block content %}
+<!-- lists products and gives the user simple search/filter controls. -->
 <section class="page-section">
     <h1>Products</h1>
 
@@ -38,7 +39,7 @@
         {% endfor %}
     </div>
     {% else %}
-    <p class="muted">No products found.</p>
+    <p class="muted">There are no products found</p>
     {% endif %}
 </section>
 {% endblock %}

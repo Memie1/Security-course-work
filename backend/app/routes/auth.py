@@ -12,6 +12,7 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
+    # This route handles account creation and basic input checks.
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         email = request.form.get("email", "").strip()
@@ -50,6 +51,7 @@ def register():
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    # Login stores the user's ID and role in the session after the password is checked.
     if request.method == "POST":
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "").strip()
@@ -79,6 +81,7 @@ def login():
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
+    # Logout clears the current session and sends the user back to the homepage.
     log_activity("logout")
     session.clear()
     flash("You have been logged out.", "success")

@@ -1,3 +1,4 @@
+# This lets the project run with python -m app.
 from . import app
 
 

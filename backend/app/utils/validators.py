@@ -10,10 +10,12 @@ MAX_COMMENT_LEN = 2000
 
 
 def allowed_file(filename):
+    # Only a small list of image extensions is allowed for uploads.
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def validate_product_form(form_data):
+    # This helper keeps seller/admin product validation in one place.
     name = form_data.get("name", "").strip()
     description = form_data.get("description", "").strip()
     price = form_data.get("price", "").strip()

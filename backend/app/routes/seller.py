@@ -11,6 +11,7 @@ seller_bp = Blueprint("seller", __name__)
 @seller_bp.route("/become-seller", methods=["POST"])
 @login_required
 def become_seller():
+    # This upgrades a normal user account to the seller role.
     db = get_db()
     db.execute(
         "UPDATE users SET role = 'seller' WHERE id = ? AND role = 'user'",
@@ -27,6 +28,7 @@ def become_seller():
 @seller_bp.route("/seller", methods=["GET"])
 @role_required("seller", "admin")
 def seller_dashboard():
+    # Sellers can see their own products and the orders linked to them here.
     db = get_db()
     products = db.execute(
         "SELECT * FROM products WHERE seller_id = ? ORDER BY id DESC",
@@ -56,6 +58,7 @@ def seller_dashboard():
 @seller_bp.route("/seller/add-product", methods=["GET", "POST"])
 @role_required("seller", "admin")
 def add_product():
+    # This route lets a seller create a new product listing.
     if request.method == "POST":
         product_form = validate_product_form(request.form)
 
@@ -87,6 +90,7 @@ def add_product():
 @seller_bp.route("/seller/edit-product/<int:product_id>", methods=["GET", "POST"])
 @role_required("seller", "admin")
 def edit_product(product_id):
+    # Sellers can edit their own products, and admins can edit any product.
     db = get_db()
     product = get_product_or_404(product_id)
 

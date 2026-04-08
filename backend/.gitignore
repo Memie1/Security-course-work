@@ -1,3 +1,4 @@
+# Local secrets and virtual environment files should not be committed.
 venv
 .flask_secret_key
 .demo_admin_password

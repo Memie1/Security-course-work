@@ -14,6 +14,7 @@ products_bp = Blueprint("products", __name__)
 
 @products_bp.route("/", methods=["GET"])
 def index():
+    # The homepage shows products and supports a simple search and category filter.
     db = get_db()
     search = request.args.get("q", "").strip()
     category = request.args.get("category", "").strip()
@@ -44,6 +45,7 @@ def index():
 
 @products_bp.route("/product/<int:product_id>", methods=["GET"])
 def product_detail(product_id):
+    # This page shows one product and the reviews linked to it.
     db = get_db()
     product = get_product_or_404(product_id)
 
@@ -78,6 +80,7 @@ def product_detail(product_id):
 @products_bp.route("/product/<int:product_id>/buy", methods=["POST"])
 @login_required
 def buy_product(product_id):
+    # Buying a product just records an order row for this coursework prototype.
     db = get_db()
     product = get_product_or_404(product_id)
 
@@ -106,6 +109,7 @@ def buy_product(product_id):
 @products_bp.route("/product/<int:product_id>/review", methods=["POST"])
 @login_required
 def add_review(product_id):
+    # Reviews are only allowed if the logged-in user has already bought the product.
     db = get_db()
     product = get_product_or_404(product_id)
 
@@ -167,6 +171,7 @@ def add_review(product_id):
 @products_bp.route("/account", methods=["GET"])
 @login_required
 def account():
+    # The account page shows the logged-in user's details and order history.
     db = get_db()
     user = db.execute(
         "SELECT * FROM users WHERE id = ?", (session["user_id"],)

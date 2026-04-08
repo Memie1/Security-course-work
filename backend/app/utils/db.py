@@ -11,6 +11,7 @@ PRODUCT_BY_ID_QUERY = "SELECT * FROM products WHERE id = ?"
 
 
 def get_db():
+    # A single database connection is reused for the current request.
     if "db" not in g:
         g.db = sqlite3.connect(current_app.config["DATABASE"])
         g.db.row_factory = sqlite3.Row
@@ -25,6 +26,7 @@ def close_db(error=None):
 
 
 def init_db():
+    # The database is created and seeded here if it does not already exist.
     db = get_db()
     db.executescript(
         """
@@ -121,6 +123,7 @@ def init_db():
 
 
 def log_activity(event_type, detail=None, product_id=None):
+    # This helper stores a simple audit trail for important actions.
     db = get_db()
     db.execute(
         """
@@ -140,6 +143,7 @@ def log_activity(event_type, detail=None, product_id=None):
 
 
 def get_product_or_404(product_id):
+    # This keeps product lookup logic in one place.
     product = get_db().execute(PRODUCT_BY_ID_QUERY, (product_id,)).fetchone()
     if not product:
         abort(404)

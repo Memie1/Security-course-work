@@ -11,6 +11,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 
 def get_secret_key(base_dir):
+    # The secret key is loaded from env first, then a local file for development use.
     env_key = os.environ.get("SECRET_KEY")
     if env_key:
         return env_key
@@ -43,6 +44,7 @@ def get_demo_admin_password(base_dir):
 
 
 def generate_csrf_token():
+    # Every session gets a token that forms must send back on POST requests.
     if "_csrf_token" not in session:
         session["_csrf_token"] = secrets.token_hex(32)
     return session["_csrf_token"]
@@ -64,6 +66,7 @@ def make_session_permanent():
 
 
 def login_required(view):
+    # This decorator stops anonymous users from reaching protected routes.
     @wraps(view)
     def wrapped(*args, **kwargs):
         from flask import flash
@@ -77,6 +80,7 @@ def login_required(view):
 
 
 def role_required(*roles):
+    # This decorator checks that the logged-in user has the right role.
     def decorator(view):
         @wraps(view)
         def wrapped(*args, **kwargs):
@@ -103,6 +107,7 @@ def apply_inline_formatting(text):
 
 
 def format_review_comment(comment):
+    # Review formatting is limited on purpose so users cannot inject unsafe HTML.
     blocks = []
     bullet_items = []
 

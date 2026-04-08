@@ -10,6 +10,7 @@ admin_bp = Blueprint("admin", __name__)
 @admin_bp.route("/admin", methods=["GET"])
 @role_required("admin")
 def admin_dashboard():
+    # The admin dashboard shows users, products, and recent security logs.
     db = get_db()
     users = db.execute("SELECT * FROM users ORDER BY id").fetchall()
     products = db.execute(
@@ -34,6 +35,7 @@ def admin_dashboard():
 @admin_bp.route("/admin/user/<int:user_id>/role", methods=["POST"])
 @role_required("admin")
 def admin_change_role(user_id):
+    # Admins can change other users between normal, seller, and admin roles.
     new_role = request.form.get("role", "").strip()
     if new_role not in ("user", "seller", "admin"):
         flash("Invalid role.", "danger")
@@ -55,6 +57,7 @@ def admin_change_role(user_id):
 @admin_bp.route("/admin/user/<int:user_id>/delete", methods=["POST"])
 @role_required("admin")
 def admin_delete_user(user_id):
+    # User deletion is blocked if related rows already exist.
     if user_id == session["user_id"]:
         flash("You can't delete your own account.", "danger")
         return redirect(url_for("admin_dashboard"))
@@ -85,6 +88,7 @@ def admin_delete_user(user_id):
 @admin_bp.route("/admin/product/<int:product_id>/delete", methods=["POST"])
 @role_required("admin")
 def admin_delete_product(product_id):
+    # Product deletion is blocked if orders or reviews already exist.
     db = get_db()
     has_orders = db.execute(
         "SELECT id FROM orders WHERE product_id = ? LIMIT 1", (product_id,)
