@@ -1,12 +1,15 @@
 Flask based web app
 
+
 first ensure to have a python venv
+
+first ensure cd into backend
 python -m venv venv
 
 activate
 venv/Scripts/activate
 
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 
 python -m app
 
